@@ -1,0 +1,18 @@
+---
+name: Acquisition plans for ssm_acquire cli.
+distros:
+  amzn2:
+    commands:
+      - rm -rf /home/ec2-user/rekall
+      - cd /home/ec2-user/
+      - yum install @development -y
+      - yum install libdwarf-tools vim -y
+      - yum install kernel-devel-$(uname -r) -y
+      - yum install kernel-headers-$(uname -r) -y
+      - git clone https://github.com/google/rekall.git
+      - cd rekall/tools/linux
+      - export KVER=$(uname -r)
+      - export KHEADER=/usr/src/kernels/$(uname -r)
+      - make profile
+      - AWS_ACCESS_KEY_ID={{ ssm_acquire_access_key }} AWS_SECRET_ACCESS_KEY={{ ssm_acquire_secret_key }} AWS_SESSION_TOKEN={{ ssm_acquire_session_token }} aws s3 cp /home/ec2-user/rekall/tools/linux/$(uname -r).zip s3://{{ ssm_acquire_s3_bucket }}/{{ ssm_acquire_instance_id }}/
+      - echo 'Rekall profile build complete.'

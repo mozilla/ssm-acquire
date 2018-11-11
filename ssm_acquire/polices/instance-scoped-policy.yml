@@ -1,0 +1,33 @@
+PolicyDocument:
+  Version: "2012-10-17"
+  Statement:
+    -
+      Sid: "STMT1"
+      Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+        - "s3:GetObject"
+        - "s3:ListObjects"
+      Resource: None
+    -
+      Sid: "STMT2"
+      Effect: "Allow"
+      Action:
+        - "ssm:ListDocuments"
+        - "ssm:ListDocumentsVersions"
+        - "ssm:DescribeDocument"
+        - "ssm:GetDocument"
+        - "ssm:DescribeInstanceInformation"
+        - "ssm:DescribeDocumentParameters"
+        - "ssm:DescribeInstanceProperties"
+        - "ssm:GetCommandInvocation"
+      Resource: '*'
+    -
+      Sid: "STMT3"
+      Effect: "Allow"
+      Action:
+        - "ssm:SendCommand"
+        - "ec2:DescribeInstanceStatus"
+      Resource:
+        - "arn:aws:ssm:*:*:document/*"
+        - None

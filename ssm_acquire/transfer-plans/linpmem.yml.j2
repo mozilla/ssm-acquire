@@ -1,0 +1,7 @@
+---
+name: Acquisition plans for ssm_acquire cli.
+distros:
+  amzn2:
+    commands:
+      - cd /home/ec2-user/
+      - AWS_ACCESS_KEY_ID={{ ssm_acquire_access_key }} AWS_SECRET_ACCESS_KEY={{ ssm_acquire_secret_key }} AWS_SESSION_TOKEN={{ ssm_acquire_session_token }} aws s3 cp /home/ec2-user/capture.aff4 s3://{{ ssm_acquire_s3_bucket }}/{{ ssm_acquire_instance_id }}/

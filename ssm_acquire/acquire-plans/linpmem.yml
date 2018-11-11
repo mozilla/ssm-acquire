@@ -1,0 +1,11 @@
+---
+name: Acquisition plans for ssm_acquire cli.
+distros:
+  amzn2:
+    commands:
+      - cd /home/ec2-user/
+      - rm capture.aff4
+      - rm linpmem-2.1.post4
+      - wget https://github.com/google/rekall/releases/download/v1.5.1/linpmem-2.1.post4
+      - sudo chmod +x linpmem-2.1.post4
+      - sudo ./linpmem-2.1.post4 --output /home/ec2-user/capture.aff4

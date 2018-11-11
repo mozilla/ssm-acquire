@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "SSM Acquire Responder Role Set"
+Resources:
+  ResponderGroup:
+    Type: "AWS::IAM::Group"
+    Properties:
+      GroupName: "SSMIncidentResponders"
+  AssetBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+  ResponderPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: "All Permissions ssm_acquire needs to interact with ec2 and ssm."
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - "s3:*"
+            Resource:
+              Fn::Join: ['', ['arn:aws:s3:::', {Ref: AssetBucket}, '/*' ]]
+          -
+            Effect: "Allow"
+            Action:
+              - "ssm:*"
+            Resource: "*"
+      ManagedPolicyName: "SSMResponderPermissions"
+  ResponderRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action:
+              - "sts:AssumeRole"
+            Condition:
+              StringEquals:
+                aws:PrincipalType: User
+              Bool:
+                aws:MultiFactorAuthPresent: 'true'
+      ManagedPolicyArns:
+        - !Ref 'ResponderPolicy'
+      RoleName: "SSMAcquireResponderRole"
+  ResponderCanAssumeRole:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: Allow incident responders to assume role.
+      Path: /
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: Allow
+            Action: sts:AssumeRole
+            Resource:
+              - !GetAtt [ResponderRole, Arn]
+      Groups:
+        - "SSMIncidentResponders"
+      ManagedPolicyName: "SSMResponderAssumeRolePermissions"
+Outputs:
+  BucketName:
+    Value: !Ref AssetBucket
+    Description: The S3 bucket where all of the memory dumps and rekall profiles will be stored.

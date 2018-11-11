@@ -1,0 +1,20 @@
+---
+name: Acquisition plans for ssm_acquire cli.
+distros:
+  amzn2:
+    commands:
+      - wget https://osquery-packages.s3.amazonaws.com/linux/osquery-3.2.6_1.linux_x86_64.tar.gz
+      - tar xzvf osquery-3.2.6_1.linux_x86_64.tar.gz
+      - echo 'Beginning interrogation of instance with the OSQuery binary.' > /tmp/interrogation.log
+      - echo '------------------------------------------------------------' >> /tmp/interrogation.log
+      - echo 'Find new processes listening on network ports.' >> /tmp/interrogation.log
+      - ./usr/bin/osqueryi "SELECT DISTINCT process.name, listening.port, listening.address, process.pid FROM processes AS process JOIN listening_ports AS listening ON process.pid = listening.pid;" --json >> /tmp/interrogation.log
+      - echo 'Find non-HTTP traffic exchanged from this instance.' >> /tmp/interrogation.log
+      - ./usr/bin/osqueryi "select s.pid, p.name, local_address, remote_address, family, protocol, local_port, remote_port from process_open_sockets s join processes p on s.pid = p.pid where remote_port not in (80, 443) and family = 2;" --json >> /tmp/interrogation.log
+      - echo 'Find processes running whose binary has been deleted from disk.' >> /tmp/interrogation.log
+      - ./usr/bin/osqueryi "SELECT name, path, pid FROM processes WHERE on_disk = 0;" --json >> /tmp/interrogation.log
+      - echo 'Find any new kernel modules that have been loaded.' >> /tmp/interrogation.log
+      - ./usr/bin/osqueryi "select name from kernel_modules;" --json >> /tmp/interrogation.log
+      - echo '------------------------------------------------------------' >> /tmp/interrogation.log
+      - echo 'End of interrogation with the OSQuery binary.' >> /tmp/interrogation.log
+      - AWS_ACCESS_KEY_ID={{ ssm_acquire_access_key }} AWS_SECRET_ACCESS_KEY={{ ssm_acquire_secret_key }} AWS_SESSION_TOKEN={{ ssm_acquire_session_token }} aws s3 cp /tmp/interrogation.log s3://{{ ssm_acquire_s3_bucket }}/{{ ssm_acquire_instance_id }}/
