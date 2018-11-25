@@ -22,7 +22,8 @@ Resources:
             Action:
               - "s3:*"
             Resource:
-              Fn::Join: ['', ['arn:aws:s3:::', {Ref: AssetBucket}, '/*' ]]
+              - Fn::Join: ['', ['arn:aws:s3:::', {Ref: AssetBucket}, '/*' ]]
+              - Fn::Join: ['', ['arn:aws:s3:::', {Ref: AssetBucket}]]
           -
             Effect: "Allow"
             Action:

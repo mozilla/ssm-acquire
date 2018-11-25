@@ -17,14 +17,9 @@ ssm-acquire
      :target: https://pyup.io/repos/github/andrewkrug/ssm_acquire/
      :alt: Updates
 
-
-
-A python module for orchestrating content acquisitions and analysis via amazon ssm.
-
+A python module for orchestrating content acquisitions and analysis via amazon ssm.  Note:  This is a pre-release.
 
 * Free software: MPL 2.0 License
-* Documentation: https://ssm-acquire.readthedocs.io.
-
 
 Features
 --------
@@ -33,6 +28,36 @@ Features
 * Interrogate an instance for top-10 IOCs using OSQuery and save the jsonified output.
 * Analyze a memory sample on a machine using docker.
 * Create a rekall profile using an instance as a build target running the Amazon SSM Agent.
+
+
+Usage
+--------
+
+Sample Cli Usage
+^^^^^^^^^^^^^^^^^
+::
+
+    pip install ssm_acquire
+    Usage: ssm_acquire [OPTIONS]
+
+    ssm_acquire a rapid evidence preservation tool for Amazon EC2.
+
+    Options:
+      --instance_id TEXT  The instance you would like to operate on.
+      --region TEXT       The aws region where the instance can be found.
+      --build             Specify if you would like to build a rekall profile with
+                          this capture.
+      --acquire           Use linpmem to acquire a memory sample from the system
+                          in question.
+      --interrogate       Use OSQuery binary to preserve top 10 type queries for
+                          rapid forensics.
+      --analyze           Use docker and rekall to autoanalyze the memory capture.
+      --deploy            Create a lambda function with a handler to take events
+                          from AWS GuardDuty.
+      --help              Show this message and exit.
+
+
+
 
 Credits
 -------

@@ -12,6 +12,7 @@ from logging import basicConfig
 from logging import INFO
 from logging import getLogger
 
+from ssm_acquire import analyze as da
 from ssm_acquire import common
 from ssm_acquire import credential
 
@@ -27,7 +28,8 @@ logger = getLogger(__name__)
 @click.option('--acquire', is_flag=True, help='Use linpmem to acquire a memory sample from the system in question.')
 @click.option('--interrogate', is_flag=True, help='Use OSQuery binary to preserve top 10 type queries for rapid forensics.')
 @click.option('--analyze', is_flag=True, help='Use docker and rekall to autoanalyze the memory capture.')
-def main(instance_id, region, build, acquire, interrogate, analyze):
+@click.option('--deploy', is_flag=True, help='Create a lambda function with a handler to take events from AWS GuardDuty.')
+def main(instance_id, region, build, acquire, interrogate, analyze, deploy):
     """ssm_acquire a rapid evidence preservation tool for Amazon EC2."""
     logger.info('Initializing ssm_acquire.')
 
@@ -45,6 +47,17 @@ def main(instance_id, region, build, acquire, interrogate, analyze):
         )
 
     spinner = itertools.cycle(['-', '/', '|', '\\'])
+
+    if analyze is True:
+        logger.info('Analysis mode active.')
+        analyzer = da.RekallManager(
+            instance_id,
+            credentials
+        )
+
+        analyzer.download_incident_data()
+        analyzer.run_rekall_plugins()
+        logger.info('Analysis complete.  The rekall-json dumps have been added to the asset store.')
 
     if acquire is True:
         commands = common.load_acquire()['distros']['amzn2']['commands']  # Only supports amzn2 for now

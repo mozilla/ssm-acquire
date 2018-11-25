@@ -86,3 +86,15 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+lambda-package:
+	mkdir -p lambda_package
+	docker run -v `pwd`:/files threatresponse/rekall:latest pip install . --upgrade -t lambda_package/
+	docker run -v `pwd`:/files threatresponse/rekall:latest pip install rekall-agent rekall -t lambda_package/
+	docker run -v `pwd`:/files threatresponse/rekall:latest pip install future==0.16.0 --upgrade -t lambda_package/
+	cp lambda_handler/*.py lambda_package/
+
+upload-lambda:
+	cp lambda_handler/*.py lambda_package/
+	zip -g ssm_acquire.zip lambda_package/*
+	aws s3 cp ssm_acquire.zip s3://ssm-acquire-us-west-2.threatresponse.cloud/ssm_acquire.zip --acl public-read

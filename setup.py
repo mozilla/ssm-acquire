@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', 'pyyaml', 'boto3', 'everett', 'botocore', 'Jinja2>=2.10', 'docker']
+requirements = ['Click>=6.0', 'pyyaml', 'boto3', 'everett', 'botocore', 'Jinja2>=2.10', 'docker', 'prompt-toolkit']
 
 setup_requirements = ['pytest-runner']
 
@@ -40,11 +40,11 @@ setup(
     include_package_data=True,
     keywords='ssm_acquire',
     name='ssm_acquire',
-    packages=find_packages(include=['ssm_acquire']),
+    packages=find_packages(include=['ssm_acquire'], exclude=['*.aff4', 'tests/*/*.zip']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/andrewkrug/ssm_acquire',
-    version='0.1.0',
+    version='0.1.0.4',
     zip_safe=False,
 )

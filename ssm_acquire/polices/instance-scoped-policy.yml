@@ -8,7 +8,9 @@ PolicyDocument:
         - "s3:PutObject"
         - "s3:GetObject"
         - "s3:ListObjects"
-      Resource: None
+      Resource:
+        - None
+        - None
     -
       Sid: "STMT2"
       Effect: "Allow"
@@ -30,4 +32,12 @@ PolicyDocument:
         - "ec2:DescribeInstanceStatus"
       Resource:
         - "arn:aws:ssm:*:*:document/*"
+        - None
+    -
+      Sid: "STMT4"
+      Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+      Resource:
+        - None
         - None

@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+ssm_acquire.zip
+lambda_package
 __pycache__/
 *.py[cod]
 *$py.class

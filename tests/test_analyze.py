@@ -1,5 +1,9 @@
 import boto3
+
 from moto import mock_s3
+from moto import mock_sts
+
+from click.testing import CliRunner
 
 
 class TestAnalyze(object):
@@ -15,6 +19,7 @@ class TestAnalyze(object):
         fh = open('tests/fixtures/interrogation.log')
         self.interrogation_log = fh.read()
         fh.close()
+
 
     @mock_s3
     def test_s3_manager(self):
@@ -46,6 +51,7 @@ class TestAnalyze(object):
         s3_manager.create_instance_directory(instance_id)
         s3_manager.get_files(files_for_case)
 
+
     def test_docker_analysis(self):
         from ssm_acquire import analyze
 
@@ -57,3 +63,13 @@ class TestAnalyze(object):
 
         result = analyzer_with_docker.run_rekall_plugins()
         assert result is not None
+
+
+    def test_analyze_cli(self):
+        from ssm_acquire import cli
+        """Test the CLI."""
+        runner = CliRunner()
+        analyze_result = runner.invoke(cli.main, ['--analyze --instance_id i-xxx --region us-west-2'])
+        assert analyze_result.exit_code == 0
+        print(analyze_result)
+        assert 0

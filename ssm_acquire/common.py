@@ -110,13 +110,20 @@ def get_limited_policy(region, instance_id):
     s3_bucket = config('asset_bucket', namespace='ssm_acquire')
     for permission in policy_template['PolicyDocument']['Statement']:
         if permission['Action'][0] == 's3:PutObject':
-            s3_arn = 'arn:aws:s3:::{}/{}/*'.format(s3_bucket, instance_id)
+            s3_arn = 'arn:aws:s3:::{}/{}'.format(s3_bucket, instance_id)
+            s3_keys = 'arn:aws:s3:::{}/{}/*'.format(s3_bucket, instance_id)
             record_index = policy_template['PolicyDocument']['Statement'].index(permission)
-            policy_template['PolicyDocument']['Statement'][record_index]['Resource'] = s3_arn
+            policy_template['PolicyDocument']['Statement'][record_index]['Resource'][0] = s3_arn
+            policy_template['PolicyDocument']['Statement'][record_index]['Resource'][1] = s3_keys
         elif permission['Action'][0].startswith('ssm:Send'):
             record_index = policy_template['PolicyDocument']['Statement'].index(permission)
             policy_template['PolicyDocument']['Statement'][record_index]['Resource'][1] = instance_arn
-
+        elif permission['Sid'] == 'STMT4':
+            s3_arn = 'arn:aws:s3:::{}'.format(s3_bucket)
+            s3_keys = 'arn:aws:s3:::{}/*'.format(s3_bucket)
+            record_index = policy_template['PolicyDocument']['Statement'].index(permission)
+            policy_template['PolicyDocument']['Statement'][record_index]['Resource'][0] = s3_arn
+            policy_template['PolicyDocument']['Statement'][record_index]['Resource'][1] = s3_keys
     statements = json.dumps(policy_template['PolicyDocument'])
     logger.info('Limited scope role generated for assumeRole: {}'.format(statements))
     return statements

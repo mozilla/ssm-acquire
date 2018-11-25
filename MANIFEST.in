@@ -4,9 +4,11 @@ include HISTORY.rst
 include LICENSE
 include README.rst
 
-recursive-include tests *
+recursive-include tests *.py
 recursive-include ssm_acquire *.j2 *.yml *.json
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
+recursive-exclude * *.zip
+
 
 recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
