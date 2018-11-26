@@ -10,10 +10,10 @@ ssm-acquire
         :target: https://ssm-acquire.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-
 A python module for orchestrating content acquisitions and analysis via amazon ssm.  Note:  This is a pre-release.
 
 * Free software: MPL 2.0 License
+* Documentation: https://ssm-acquire.readthedocs.io.
 
 Features
 --------
@@ -49,9 +49,6 @@ Sample Cli Usage
       --deploy            Create a lambda function with a handler to take events
                           from AWS GuardDuty.
       --help              Show this message and exit.
-
-
-
 
 Credits
 -------
