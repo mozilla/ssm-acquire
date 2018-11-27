@@ -50,6 +50,31 @@ Sample Cli Usage
                           from AWS GuardDuty.
       --help              Show this message and exit.
 
+Getting Started
+^^^^^^^^^^^^^^^^^
+
+Deploy Responder Role into AWS Account with the CloudFormation Template: cloudformation/responder_role.yml. (Note: this role requires 2FA to assume) This will create a role with the required permissions to run ssm commands on ec2 instances and an s3 bucket to store the memory assets. You will need the bucket name and the ARN of the role in the next step.
+
+Setup a config file in your home directory. It should be named `.threatresponse.ini` There is a sample config file in conf/settings.ini - it has three required parameters.
+
+* mfa_serial_number: the serial number for your MFA device for assuming the role.
+* asset_bucket: the name of the bucket to store the assets. This was created in step 1.
+* ssm_acquire_role_arn: the ARN of the Responder Role you created in step 1.
+
+``pip install ssm_acquire``
+
+To acquire memory and build a rekall profile from an instance:
+
+``ssm_acquire --instance_id i-xxxxxxxx --region us-west-2 --build --acquire``
+
+You can analyze your memory capture right away with:
+
+``ssm_acquire --instance_id i-xxxxxxx --analyze``
+
+This will analyze the memory dump with the most common rekall plugins: [psaux, pstree, netstat, ifconfig, pidhashtable]
+When the analysis is done it will upload the results back to the asset store.
+
+
 Credits
 -------
 
