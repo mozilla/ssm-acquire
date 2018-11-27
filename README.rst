@@ -6,20 +6,14 @@ ssm-acquire
 .. image:: https://img.shields.io/pypi/v/ssm_acquire.svg
         :target: https://pypi.python.org/pypi/ssm_acquire
 
-.. image:: https://img.shields.io/travis/andrewkrug/ssm_acquire.svg
-        :target: https://travis-ci.org/andrewkrug/ssm_acquire
-
 .. image:: https://readthedocs.org/projects/ssm-acquire/badge/?version=latest
         :target: https://ssm-acquire.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/andrewkrug/ssm_acquire/shield.svg
-     :target: https://pyup.io/repos/github/andrewkrug/ssm_acquire/
-     :alt: Updates
-
 A python module for orchestrating content acquisitions and analysis via amazon ssm.  Note:  This is a pre-release.
 
 * Free software: MPL 2.0 License
+* Documentation: https://ssm-acquire.readthedocs.io.
 
 Features
 --------
@@ -56,7 +50,6 @@ Sample Cli Usage
                           from AWS GuardDuty.
       --help              Show this message and exit.
 
-
 Getting Started
 ^^^^^^^^^^^^^^^^^
 
@@ -80,7 +73,6 @@ You can analyze your memory capture right away with:
 
 This will analyze the memory dump with the most common rekall plugins: [psaux, pstree, netstat, ifconfig, pidhashtable]
 When the analysis is done it will upload the results back to the asset store.
-
 
 
 Credits
