@@ -1,7 +1,7 @@
 import os
 import json
 import yaml
-from everett.manager import ConfigIniEnv
+from everett.ext.inifile import ConfigIniEnv
 from everett.manager import ConfigManager
 from everett.manager import ConfigOSEnv
 from jinja2 import Template

@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', 'pyyaml', 'boto3', 'everett', 'botocore', 'Jinja2>=2.10', 'docker', 'prompt-toolkit']
+requirements = ['Click>=6.0', 'pyyaml', 'boto3', 'everett[ini]', 'botocore', 'Jinja2>=2.10', 'docker', 'prompt-toolkit']
 
 setup_requirements = ['pytest-runner']
 
