@@ -4,7 +4,7 @@
 
 __author__ = """Andrew J Krug"""
 __email__ = 'andrewkrug@gmail.com'
-__version__ = '0.1.0.4'
+__version__ = '0.1.0.5'
 
 from ssm_acquire import analyze
 from ssm_acquire import cli
